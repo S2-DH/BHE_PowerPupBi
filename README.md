@@ -59,7 +59,7 @@ Power BI doesn't support picking individual visuals at import time — a report 
 **Example Dashboard**
 Here are 4 pages of Configured Dashboards
 
-1) Displaying:
+**1) Displaying:**
    
 - Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count  
 - Environments
@@ -74,7 +74,7 @@ Here are 4 pages of Configured Dashboards
 <img width="2328" height="1310" alt="PowerPupBI_01" src="https://github.com/user-attachments/assets/7712c40c-8ebe-4bc8-80de-d9bc171ae050" />
 
 
-PAGE 2) Displaying:
+**PAGE 2) Displaying - Findings Page**
 
 - Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count
 - Finding Details pane (Affected Principals)
@@ -86,7 +86,7 @@ PAGE 2) Displaying:
 <img width="2329" height="1310" alt="PowerPupBI_02" src="https://github.com/user-attachments/assets/bd3d670f-2e65-4ffd-a4e7-12c3606ba6c0" />
 
 
-PAGE 3)  Displaying:
+**PAGE 3)  Displaying - Collector Health**
 
 - Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count
 - Collector Health BReakdown
@@ -103,7 +103,7 @@ PAGE 3)  Displaying:
 <img width="2329" height="1310" alt="PowerPupBI_03" src="https://github.com/user-attachments/assets/a9e6e4b7-ecb1-4d1a-bbf0-a117a68b8b0f" />
 
 
-PAGE 4) Displaying - Certification Page Items
+**PAGE 4) Displaying - Certification Page Items**
 
 - Pendiong Items by Environment
 - Total in Queue (Certification Count)
