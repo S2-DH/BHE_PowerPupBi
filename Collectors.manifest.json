@@ -1,0 +1,65 @@
+[
+  {
+    "Name": "Generic Extract",
+    "Script": "Invoke-BHEExtract.ps1",
+    "Description": "Pulls available-domains, clients, posture-stats, completeness, and audit into raw CSV/JSON. Must run before Flatten Extract - that step reads its output.",
+    "Output": "Data\\available-domains.csv, Data\\clients.csv, Data\\posture-stats_*.csv, Data\\completeness.csv, Data\\audit.csv",
+    "FeedsPage": "Overview (base tables for other collectors)"
+  },
+  {
+    "Name": "Flatten Extract",
+    "Script": "Flatten-BHEData.ps1",
+    "Description": "Unwraps nested JSON in audit.csv and clients.csv (produced by Generic Extract) into flat, Power BI-ready tables. Requires Generic Extract to have run first.",
+    "Output": "Data\\audit-flat.csv, Data\\clients-flat.csv",
+    "FeedsPage": "Activity / Collectors & Schedules"
+  },
+  {
+    "Name": "Certifications",
+    "Script": "Get-BHECertifications.ps1",
+    "Description": "Pulls Tier Zero / privilege-zone certification status (Pending, Auto, Manual, Revoked) for every object.",
+    "Output": "Data\\certifications.csv",
+    "FeedsPage": "Certifications"
+  },
+  {
+    "Name": "Certification Selectors",
+    "Script": "Get-BHECertificationSelectors.ps1",
+    "Description": "Enriches certifications.csv with the selector rule(s) that placed each object into its tag. Requires Certifications to have run first.",
+    "Output": "Data\\certifications-with-selectors.csv",
+    "FeedsPage": "Certifications"
+  },
+  {
+    "Name": "Findings",
+    "Script": "Get-BHEFindings.ps1",
+    "Description": "Pulls attack path finding counts and detail (ASREPRoasting, Kerberoasting, T0GenericAll, etc.) per environment.",
+    "Output": "Data\\finding-details.csv",
+    "FeedsPage": "Findings Detail"
+  },
+  {
+    "Name": "Posture History",
+    "Script": "Get-BHEPosture.ps1",
+    "Description": "Pulls posture history and stats (exposure trend, group/session completeness) per environment. Possible overlap with the posture-history-*.csv files Generic Extract also produces - confirm which one the dashboard actually uses.",
+    "Output": "Data\\posture-history.csv",
+    "FeedsPage": "Overview"
+  },
+  {
+    "Name": "Panels (Data Quality / Tier Zero / Trends)",
+    "Script": "Get-BHEPanels.ps1",
+    "Description": "Pulls data quality stats, finding trends, and Tier Zero composition in a single pass.",
+    "Output": "Data\\data-quality.csv, Data\\finding-trends.csv, Data\\tier-zero-comp.csv",
+    "FeedsPage": "Overview"
+  },
+  {
+    "Name": "Collector Health",
+    "Script": "Get-BHECollectorHealth.ps1",
+    "Description": "Pulls collector/client status - last check-in, schedule, job success - per registered collector.",
+    "Output": "Data\\collector-health.csv",
+    "FeedsPage": "Collectors & Schedules"
+  },
+  {
+    "Name": "Tenant Info",
+    "Script": "Get-BHEVersion.ps1",
+    "Description": "Pulls tenant host, BHE version, API version, and logged-in user for the dashboard footer bar.",
+    "Output": "Data\\tenant-info.csv",
+    "FeedsPage": "All pages (footer)"
+  }
+]
