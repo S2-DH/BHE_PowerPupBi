@@ -60,6 +60,7 @@ Power BI doesn't support picking individual visuals at import time — a report 
 Here are 4 pages of Configured Dashboards
 
 1) Displaying:
+   
 - Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count  
 - Environments
 - Tier Zero Composition
@@ -69,20 +70,26 @@ Here are 4 pages of Configured Dashboards
 - Posture Trend by Environment (with Metric Selector)
 - Tenant Details | BHE Version | API Version| Logged in (Tenant) User
 
+
 <img width="2328" height="1310" alt="PowerPupBI_01" src="https://github.com/user-attachments/assets/7712c40c-8ebe-4bc8-80de-d9bc171ae050" />
 
+
 PAGE 2) Displaying:
+
 - Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count
 - Finding Details pane (Affected Principals)
 - Oldest UnResolved (Legend)
 - Finding Type
 - Tenant Details | BHE Version | API Version| Logged in (Tenant) User
+
  
 <img width="2329" height="1310" alt="PowerPupBI_02" src="https://github.com/user-attachments/assets/bd3d670f-2e65-4ffd-a4e7-12c3606ba6c0" />
 
+
 PAGE 3)  Displaying:
+
 - Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count
--Collector Health BReakdown
+- Collector Health BReakdown
    - Collector Name
    - Health
    - Collector Type
@@ -92,9 +99,12 @@ PAGE 3)  Displaying:
    - Status
 - Tenant Details | BHE Version | API Version| Logged in (Tenant) User
 
+
 <img width="2329" height="1310" alt="PowerPupBI_03" src="https://github.com/user-attachments/assets/a9e6e4b7-ecb1-4d1a-bbf0-a117a68b8b0f" />
 
+
 PAGE 4) Displaying - Certification Page Items
+
 - Pendiong Items by Environment
 - Total in Queue (Certification Count)
 - Pending item count
@@ -103,7 +113,10 @@ PAGE 4) Displaying - Certification Page Items
 - Tenant Details | BHE Version | API Version| Logged in (Tenant) User
 - Certified Pending Items list
 
+
 <img width="2329" height="1310" alt="PowerPupBI_04" src="https://github.com/user-attachments/assets/bed1d8db-7520-4b0f-a60b-b7120113a97b" />
+
+
 
 ## Scheduled collection
 
