@@ -145,19 +145,3 @@ BHE-PowerBI-Toolkit/
 ├── .gitignore
 └── Data/                        # generated - git-ignored
 ```
-
-## Publishing to GitHub
-
-```powershell
-cd BHE-PowerBI-Toolkit
-git init
-git add .
-git commit -m "Initial commit: BHE Power BI toolkit"
-gh repo create bhe-powerbi-toolkit --private --source=. --push
-```
-No `gh` CLI? Create the empty repo on github.com first, then:
-```powershell
-git remote add origin https://github.com/<you>/bhe-powerbi-toolkit.git
-git branch -M main
-git push -u origin main
-```
