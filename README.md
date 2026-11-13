@@ -64,9 +64,11 @@ Power BI doesn't support picking individual visuals at import time — a report 
 - **Want everything:** `.\Update-BHEData.ps1`, then open the dashboard file and Refresh.
 - **Want a subset:** use `.\Launch-BHEPowerBI.ps1`'s menu to run only the collectors feeding the pages you care about (check the Notes column above for dependencies first), then delete the unneeded report pages in Power BI Desktop (right-click tab → Delete). Pages with no data just show blank visuals — harmless, but worth trimming.
 
-<!--
-<img width="1443" height="810" alt="image" src="https://github.com/user-attachments/assets/1ed54f27-abee-4ff7-a5ce-a91e5ea63a74" />
-
+Dashboard / Widgets
+<img width="1443" height="810" alt="PowerPupBI - Dashboard 1" src="https://github.com/user-attachments/assets/e280fa9e-f551-4765-a835-12d0ef3f7c82" />
+<img width="1871" height="1052" alt="PowerPupBI - Dashboard 2" src="https://github.com/user-attachments/assets/4a496b1f-0efd-4dc6-88bd-cbe66c41d8ec" />
+<img width="1872" height="1052" alt="PowerPupBI - Dashboard 3" src="https://github.com/user-attachments/assets/7bac720f-c79e-407a-a094-ac00a908fd8c" />
+<img width="1875" height="1056" alt="PowerPupBI - Dashboard 4" src="https://github.com/user-attachments/assets/96f91395-d3e8-4f0c-8469-8aa97a238c1e" />
 
 ## Scheduled collection
 
