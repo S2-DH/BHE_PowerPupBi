@@ -79,16 +79,7 @@ Walks you through Daily or Hourly, and registers a Windows Scheduled Task that r
 
 ## How the Power BI fields are wired together
 
-<!--
-📸 SCREENSHOT: Field mappings
-In Power BI Desktop: Model view (left-hand icon stack) showing the
-relationships between tables — e.g. how `certifications` links to
-`certifications-with-selectors`, how `clients` links to `api-tokens` and
-`collector-health`. Also worth a second screenshot of one visual's field
-wells (Visualizations pane) showing which CSV column feeds which well, for
-anyone extending a widget. This is the page most future-you / new-TAM
-questions will come back to.
--->
+<img width="2166" height="579" alt="PowerPupBI - Model View" src="https://github.com/user-attachments/assets/b7a2cef8-4e3c-4de8-8d34-45ec6d61e07d" />
 
 Each collector writes its own CSV into `Data\`, and Power Query imports each one as its own query (not a single combined-folder query) — so adding a new collector means adding a new `Get Data → Text/CSV` query pointed at its CSV, not editing an existing one. See `Get-BHEAuditLog.ps1`'s CSV (`Data\audit-log.csv`) for the most recently added example of this pattern, including its `DaysAgo`/`RecencyBucket` helper columns used for conditional formatting.
 
