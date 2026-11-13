@@ -116,7 +116,7 @@ BH-PowerPupBI/
 ├── Get-BHEAuditLog.ps1
 ├── Get-BHEVersion.ps1
 ├── Test-BHE-API_(Using Env).ps1     # utility, not a collector
-├── <dashboard>.pbit                 # dashboard template - Refresh after running collectors
+├── PowerPUPBi_BH-Dashboard.pbit     # dashboard template - Refresh after running collectors
 ├── .env.example
 ├── .gitignore
 ├── README.md
