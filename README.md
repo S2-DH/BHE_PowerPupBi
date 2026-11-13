@@ -129,18 +129,3 @@ BH-PowerPupBI/
 └── Data/                            # generated at runtime - git-ignored
 ```
 
-## Publishing to GitHub
-
-```powershell
-cd BH-PowerPupBI
-git init
-git add .
-git commit -m "Initial commit: BH-PowerPupBI toolkit"
-gh repo create bh-powerpupbi --private --source=. --push
-```
-No `gh` CLI? Create the empty repo on github.com first, then:
-```powershell
-git remote add origin https://github.com/<you>/bh-powerpupbi.git
-git branch -M main
-git push -u origin main
-```
