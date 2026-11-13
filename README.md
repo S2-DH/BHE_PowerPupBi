@@ -1,7 +1,13 @@
-[README.md](https://github.com/user-attachments/files/30095821/README.md)
-# BHE Power BI Toolkit
+[README.md](https://github.com/user-attachments/files/34809725/README.md)
+# BH-PowerPupBI
 
-PowerShell collectors + a Power BI dashboard for BloodHound Enterprise: certification/attestation status, findings, data quality, Tier Zero composition, and collector activity.
+PowerShell collectors + a Power BI dashboard for BloodHound Enterprise: certifications/attestation status, findings, finding movement, data quality, Tier Zero composition, collector health, API token hygiene, and a live audit log — all refreshed with one script.
+
+> "PowerPupBI" is just the project's display name, used in this README and in the scripts' own console banners/log filenames. It doesn't rename any of the actual `.ps1` files, CSV outputs, or PowerShell function names — those stay as `BHE-*` / `Get-BHE*` throughout, so nothing you've already got wired up in Power BI or Task Scheduler breaks.
+
+**New here?** [`GETTING-STARTED.md`](./GETTING-STARTED.md) is a one-page version of everything below — use that if you just want to get running. This file is the fuller reference.
+
+**Requires:** a BloodHound **Enterprise** tenant (not CE) with an API token, network access to it, Windows + PowerShell, and Power BI Desktop (free). Full prerequisites table in `GETTING-STARTED.md`.
 
 ## Quick start
 
@@ -11,19 +17,21 @@ PowerShell collectors + a Power BI dashboard for BloodHound Enterprise: certific
    BHE_TOKEN_ID=...
    BHE_TOKEN_KEY=...
    ```
-2. First run - get everything:
+2. Run everything:
    ```powershell
    .\Update-BHEData.ps1
    ```
-   Runs every collector in the right order (handles the Extract → Flatten dependency, logs the run, tells you if a new environment appeared). **Known gap:** this predates Certifications, so also run those two once manually:
-   ```powershell
-   .\Get-BHECertifications.ps1
-   .\Get-BHECertificationSelectors.ps1
-   ```
-   (or add them as steps inside `Update-BHEData.ps1`'s `$steps` array so future runs cover them automatically)
-3. Open **`BHE-Dashboard_v1.0.pbix`** in Power BI Desktop, click **Refresh** (Home ribbon). Don't need every page? Right-click a page tab → **Delete** — safe, the file is self-contained.
+   Runs every collector in the right order (handles the Extract → Flatten dependency, logs the run to `Data\logs\powerpupbi_<timestamp>.log`, tells you if a new environment appeared).
+3. Open the `.pbit` dashboard template in Power BI Desktop, click **Refresh** (Home ribbon). Don't need every page? Right-click a page tab → **Delete** — safe, the file is self-contained.
 
 That's it. No manual table setup, no re-wiring measures or relationships.
+
+<!--
+📸 SCREENSHOT: Script running
+Capture Update-BHEData.ps1 mid-run in the console — ideally the RUN SUMMARY
+table at the end showing every step as [OK]. Shows a new user exactly what
+a healthy run looks like, and what to compare against if something fails.
+-->
 
 ## Two ways to run collectors
 
@@ -36,87 +44,36 @@ That's it. No manual table setup, no re-wiring measures or relationships.
 |---|---|---|---|
 | `Invoke-BHEExtract.ps1` | available-domains, clients, posture-stats, completeness, audit (raw) | Base tables | **Must run before Flatten Extract** |
 | `Flatten-BHEData.ps1` | Flattens audit.csv/clients.csv into PBI-ready tables | Activity / Collectors & Schedules | Depends on Generic Extract's output |
-| `Get-BHECertifications.ps1` | Tier Zero / privilege-zone certification status (Pending, Auto, Manual, Revoked) per object | Certifications page | Not yet in Update-BHEData.ps1 - see Quick Start |
-| `Get-BHECertificationSelectors.ps1` | The selector rule(s) that placed each object into its tag | Certifications page | Run after Certifications |
 | `Get-BHEFindings.ps1` | Attack path finding counts/detail per environment | Findings Detail page | |
-| `Get-BHEPosture.ps1` | Posture history/stats per environment | Overview page | Possible overlap with Generic Extract's posture-history files - unconfirmed |
+| `Get-BHECertifications.ps1` | Tier Zero / privilege-zone certification status (Pending, Auto, Manual, Revoked) per object | Certifications page | |
+| `Get-BHECertificationSelectors.ps1` | The selector rule(s) that placed each object into its tag | Certifications page | Run after Certifications |
+| `Get-BHEFindingTrends.ps1` | Finding count movement over a time window (default 30 days) — new vs. shrinking finding types | Findings Detail (trend section) | Answers "is risk going up or down" |
+| `Get-BHEPosture.ps1` | Posture history/stats per environment | Overview page | |
 | `Get-BHEPanels.ps1` | Data quality, finding trends, Tier Zero composition | Overview page | |
-| `Get-BHECollectorHealth.ps1` | Collector/client status - check-in, schedule, job success | Collectors & Schedules page | |
+| `Get-BHECollectorHealth.ps1` | Collector/client status — check-in, schedule, job success | Collectors & Schedules page | |
+| `Get-BHETokens.ps1` | API token inventory — name, owning user/collector, created date, last used, expiry | Collectors & Schedules (or a Security/Admin page) | |
+| `Get-BHEAuditLog.ps1` | Last 50 audit trail entries — date/time, actor, action, status, with a Today/Past-7-Days/Older recency column | Overview or a new Activity page | |
 | `Get-BHEVersion.ps1` | Tenant host, BHE version, API version, logged-in user | Footer bar (all pages) | |
 
 This table is also `Collectors.manifest.json`, in the same order — `Launch-BHEPowerBI.ps1`'s menu reads it directly. If you edit the manifest, update this table by hand (not auto-synced). Add a row for any collector not listed and it'll show up in the menu automatically.
 
 ### Utility scripts (not collectors)
 
-`Test-BHE-API_(Using Env).ps1` is a connectivity/auth check, not something that produces dashboard data - it's intentionally left out of the manifest. Run it manually if you need to sanity-check `.env` before a full run.
+`Test-BHE-API_(Using Env).ps1` is a connectivity/auth check, not something that produces dashboard data — it's intentionally left out of the manifest. Run it manually if you need to sanity-check `.env` before a full run.
 
 ## Picking which widgets you want
 
 Power BI doesn't support picking individual visuals at import time — a report is one file. The practical equivalent:
-- **Want everything:** `.\Update-BHEData.ps1`, then open the `.pbix` and Refresh.
-- **Want a subset:** use `.\Launch-BHEPowerBI.ps1`'s menu to run only the collectors feeding the pages you care about (check the Notes column above for dependencies first), then delete the unneeded report pages in Power BI Desktop (right-click tab → Delete). Pages with no data just show blank visuals - harmless, but worth trimming.
+- **Want everything:** `.\Update-BHEData.ps1`, then open the dashboard file and Refresh.
+- **Want a subset:** use `.\Launch-BHEPowerBI.ps1`'s menu to run only the collectors feeding the pages you care about (check the Notes column above for dependencies first), then delete the unneeded report pages in Power BI Desktop (right-click tab → Delete). Pages with no data just show blank visuals — harmless, but worth trimming.
 
-**Example Dashboard**
-Here are 4 pages of Configured Dashboards
-
-**1) Displaying:**
-   
-- Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count  
-- Environments
-- Tier Zero Composition
-- Findings by Type
-- Posture by Environment
-- Posture Trend
-- Posture Trend by Environment (with Metric Selector)
-- Tenant Details | BHE Version | API Version| Logged in (Tenant) User
-
-
-<img width="2328" height="1310" alt="PowerPupBI_01" src="https://github.com/user-attachments/assets/7712c40c-8ebe-4bc8-80de-d9bc171ae050" />
-
-
-**PAGE 2) Displaying - Findings Page**
-
-- Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count
-- Finding Details pane (Affected Principals)
-- Oldest UnResolved (Legend)
-- Finding Type
-- Tenant Details | BHE Version | API Version| Logged in (Tenant) User
-
- 
-<img width="2329" height="1310" alt="PowerPupBI_02" src="https://github.com/user-attachments/assets/bd3d670f-2e65-4ffd-a4e7-12c3606ba6c0" />
-
-
-**PAGE 3)  Displaying - Collector Health**
-
-- Collector Count | Collector Health | Outdated Collector count | Stale Collectors | Average Exposure % | Tier Zero Count | Hygiene Attack Path count
-- Collector Health BReakdown
-   - Collector Name
-   - Health
-   - Collector Type
-   - Installed Version
-   - Last Seen (HOurs)
-   - Latest Version
-   - Status
-- Tenant Details | BHE Version | API Version| Logged in (Tenant) User
-
-
-<img width="2329" height="1310" alt="PowerPupBI_03" src="https://github.com/user-attachments/assets/a9e6e4b7-ecb1-4d1a-bbf0-a117a68b8b0f" />
-
-
-**PAGE 4) Displaying - Certification Page Items**
-
-- Pendiong Items by Environment
-- Total in Queue (Certification Count)
-- Pending item count
-- Pending %
-- Count of Name by Environment and Certified Label
-- Tenant Details | BHE Version | API Version| Logged in (Tenant) User
-- Certified Pending Items list
-
-
-<img width="2329" height="1310" alt="PowerPupBI_04" src="https://github.com/user-attachments/assets/bed1d8db-7520-4b0f-a60b-b7120113a97b" />
-
-
+<!--
+📸 SCREENSHOT: Dashboard pages
+One screenshot per report page (Overview, Certifications, Findings Detail,
+Collectors & Schedules, etc.) so a new user can see what each page looks
+like before opening the file. Crop out anything environment/tenant-specific
+you don't want public if this repo isn't private.
+-->
 
 ## Scheduled collection
 
@@ -125,6 +82,21 @@ Here are 4 pages of Configured Dashboards
 ```
 Walks you through Daily or Hourly, and registers a Windows Scheduled Task that runs `Update-BHEData.ps1` unattended. Set Power BI's own scheduled refresh (Service) or just reopen/refresh the desktop file to see the latest pull.
 
+## How the Power BI fields are wired together
+
+<!--
+📸 SCREENSHOT: Field mappings
+In Power BI Desktop: Model view (left-hand icon stack) showing the
+relationships between tables — e.g. how `certifications` links to
+`certifications-with-selectors`, how `clients` links to `api-tokens` and
+`collector-health`. Also worth a second screenshot of one visual's field
+wells (Visualizations pane) showing which CSV column feeds which well, for
+anyone extending a widget. This is the page most future-you / new-TAM
+questions will come back to.
+-->
+
+Each collector writes its own CSV into `Data\`, and Power Query imports each one as its own query (not a single combined-folder query) — so adding a new collector means adding a new `Get Data → Text/CSV` query pointed at its CSV, not editing an existing one. See `Get-BHEAuditLog.ps1`'s CSV (`Data\audit-log.csv`) for the most recently added example of this pattern, including its `DaysAgo`/`RecencyBucket` helper columns used for conditional formatting.
+
 ## Security
 
 `.env` holds your API credentials and is git-ignored — never commit it. Commit `.env.example` (no real values) instead.
@@ -132,16 +104,43 @@ Walks you through Daily or Hourly, and registers a Windows Scheduled Task that r
 ## Repo structure
 
 ```
-BHE-PowerBI-Toolkit/
-├── Update-BHEData.ps1           # full-run orchestrator (use this for scheduling)
-├── Launch-BHEPowerBI.ps1        # selective-run menu (delegates "all" to Update-BHEData.ps1)
-├── Collectors.manifest.json     # collector list + descriptions (drives the menu)
-├── Invoke-BHEExtract.ps1        # base data - must run before Flatten
+BH-PowerPupBI/
+├── Update-BHEData.ps1               # full-run orchestrator (use this for scheduling)
+├── Launch-BHEPowerBI.ps1            # selective-run menu (delegates "all" to Update-BHEData.ps1)
+├── Collectors.manifest.json         # collector list + descriptions (drives the menu)
+├── Invoke-BHEExtract.ps1            # base data - must run before Flatten
 ├── Flatten-BHEData.ps1
-├── Get-BHE*.ps1                 # individual collectors
-├── Test-BHE-API_(Using Env).ps1 # utility, not a collector
-├── BHE-Dashboard_v1.0.pbix      # full dashboard - Refresh after running collectors
+├── Get-BHEFindings.ps1
+├── Get-BHECertifications.ps1
+├── Get-BHECertificationSelectors.ps1
+├── Get-BHEFindingTrends.ps1
+├── Get-BHEPosture.ps1
+├── Get-BHEPanels.ps1
+├── Get-BHECollectorHealth.ps1
+├── Get-BHETokens.ps1
+├── Get-BHEAuditLog.ps1
+├── Get-BHEVersion.ps1
+├── Test-BHE-API_(Using Env).ps1     # utility, not a collector
+├── <dashboard>.pbit                 # dashboard template - Refresh after running collectors
 ├── .env.example
 ├── .gitignore
-└── Data/                        # generated - git-ignored
+├── README.md
+├── GETTING-STARTED.md
+└── Data/                            # generated at runtime - git-ignored
+```
+
+## Publishing to GitHub
+
+```powershell
+cd BH-PowerPupBI
+git init
+git add .
+git commit -m "Initial commit: BH-PowerPupBI toolkit"
+gh repo create bh-powerpupbi --private --source=. --push
+```
+No `gh` CLI? Create the empty repo on github.com first, then:
+```powershell
+git remote add origin https://github.com/<you>/bh-powerpupbi.git
+git branch -M main
+git push -u origin main
 ```
