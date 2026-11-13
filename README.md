@@ -26,12 +26,9 @@ PowerShell collectors + a Power BI dashboard for BloodHound Enterprise: certific
 
 That's it. No manual table setup, no re-wiring measures or relationships.
 
-<!--
 📸 SCREENSHOT: Script running
-Capture Update-BHEData.ps1 mid-run in the console — ideally the RUN SUMMARY
-table at the end showing every step as [OK]. Shows a new user exactly what
-a healthy run looks like, and what to compare against if something fails.
--->
+<img width="1089" height="790" alt="PowerPupBI - Scripts" src="https://github.com/user-attachments/assets/9780c5b7-0349-415a-96b2-121bce00ea95" />
+
 
 ## Two ways to run collectors
 
@@ -68,12 +65,8 @@ Power BI doesn't support picking individual visuals at import time — a report 
 - **Want a subset:** use `.\Launch-BHEPowerBI.ps1`'s menu to run only the collectors feeding the pages you care about (check the Notes column above for dependencies first), then delete the unneeded report pages in Power BI Desktop (right-click tab → Delete). Pages with no data just show blank visuals — harmless, but worth trimming.
 
 <!--
-📸 SCREENSHOT: Dashboard pages
-One screenshot per report page (Overview, Certifications, Findings Detail,
-Collectors & Schedules, etc.) so a new user can see what each page looks
-like before opening the file. Crop out anything environment/tenant-specific
-you don't want public if this repo isn't private.
--->
+<img width="1443" height="810" alt="image" src="https://github.com/user-attachments/assets/1ed54f27-abee-4ff7-a5ce-a91e5ea63a74" />
+
 
 ## Scheduled collection
 
