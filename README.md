@@ -26,11 +26,8 @@ PowerShell collectors + a Power BI dashboard for BloodHound Enterprise: certific
 
 That's it. No manual table setup, no re-wiring measures or relationships.
 
-📸 SCREENSHOT: Script running / Results
+
 <img width="546" height="1121" alt="PowerPupBI - Scripts" src="https://github.com/user-attachments/assets/283574cb-7c00-421f-8833-42c95f9724b6" />
-
-
-
 
 ## Two ways to run collectors
 
