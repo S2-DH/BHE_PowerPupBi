@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/34809725/README.md)
+[README.md](https://github.com/user-attachments/files/34812101/README.md)
 # BH-PowerPupBI
 
 PowerShell collectors + a Power BI dashboard for BloodHound Enterprise: certifications/attestation status, findings, finding movement, data quality, Tier Zero composition, collector health, API token hygiene, and a live audit log — all refreshed with one script.
@@ -128,4 +128,5 @@ BH-PowerPupBI/
 ├── GETTING-STARTED.md
 └── Data/                            # generated at runtime - git-ignored
 ```
+
 
